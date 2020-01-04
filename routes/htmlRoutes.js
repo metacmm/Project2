@@ -2,9 +2,12 @@ var db = require("../models");
 let isAuthenticated = require('../config/middleware/isAuthenticated');
 
 module.exports = function (app) {
-  app.get('/', isAuthenticated.authLogin, function (req, res) {
-    res.redirect('/index');
-  })
+  // app.get('/', isAuthenticated.authLogin, function (req, res) {
+  //   res.redirect('/index');
+  // });
+  app.get("/", function(req, res){
+    res.render("index");
+  });
 
   app.get("/tutors/:grade/:skillLevel/:location/:subject", function (req, res) {
     //use raw sql to join three tables
@@ -44,17 +47,21 @@ module.exports = function (app) {
 
   });
 
-  app.get("/index", function (req, res) {
-    if (req.session.user || req.user) {
-      db.Subject.findAll({}).then(function(data){
-        let renderObj = {
-          subjects: data
-        };
-        res.render("partials/searchtutor", renderObj);
-      });
-    } else {
-      res.redirect("login");
-    }
+  // app.get("/index", function (req, res) {
+  //   if (req.session.user || req.user ) {
+  //     db.Subject.findAll({}).then(function(data){
+  //       let renderObj = {
+  //         subjects: data
+  //       };
+  //       res.render("partials/searchtutor", renderObj);
+  //     });
+  //   } else {
+  //     res.redirect("login");
+  //   }
+  // });
+
+  app.get("/index", function(req, res){
+    res.render("index");
   });
 
   // Load create tutor page
@@ -68,20 +75,28 @@ module.exports = function (app) {
     });
   });
 
-  app.get("/signup", function (req, res) {
-    if (req.session.user || req.user) {
-      res.redirect('/index');
-    } else {
-      res.render("signup");
-    }
-  });
+  // app.get("/signup", function (req, res) {
+  //   if (req.session.user || req.user) {
+  //     res.redirect('/index');
+  //   } else {
+  //     res.render("signup");
+  //   }
+  // });
 
-  app.get("/login", function (req, res) {
-    if (req.session.user || req.user) {
-      res.redirect('/');
-    } else {
-      res.render("login");
-    }
+  app.get("/signup", function(re, res){
+    res.render("signup");
+  })
+
+  // app.get("/login", function (req, res) {
+  //   if (req.session.user || req.user) {
+  //     res.redirect('/');
+  //   } else {
+  //     res.render("login");
+  //   }
+  // });
+
+  app.get("/login", function(req, res){
+    res.render("login");
   });
 
   // Render 404 page for any unmatched routes
